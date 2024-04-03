@@ -50,18 +50,18 @@ export abstract class Instrumentos{
         let tipo: string = ""
             switch(this._tipo){
                 case 1:
-                    tipo = "Instrumentos de Corda"
+                    tipo = "Instrumento de Corda"
                         break;
                 case 2:
-                    tipo = "Instrumentos de Sopro"
+                    tipo = "Instrumento de Sopro"
             }
 
             console.log("****************************************************")
             console.log("                     Instrumento                    ")
             console.log("****************************************************")
-            console.log(`Id do produto: ${this._id}`)
-            console.log(`Nome do produto: ${this._nome}`)
-            console.log(`Tipo do produto: ${tipo}`)
-            console.log(`Preço do produto: ${this._preco}`)
+            console.log(`Id do instrumento: ${this._id}`)
+            console.log(`Nome do instrumento: ${this._nome}`)
+            console.log(`Tipo do instrumento: ${tipo}`)
+            console.log(`Preço do instrumento: R$ ${this._preco.toFixed(2)}`)
     }
 }

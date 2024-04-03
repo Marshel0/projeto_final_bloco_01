@@ -1,8 +1,19 @@
 import readlinesync = require('readline-sync')
+import { InstrumentosController } from './src/controller/InstrumentosController';
+import { InstrumentosCorda } from './src/model/InstrumentosCorda';
+import { InstrumentosSopro } from './src/model/InstrumentosSopro';
+
 
 export function main() {
 
-    let opcao: number;
+
+    let instrumentos: InstrumentosController = new InstrumentosController();
+
+    let opcao, id, tipo, preco: number;
+    let nome: string; 
+    let materialCorda: string;
+    let materialInstrumento: string;
+    const tipoInstrumentos = ['Instrumento de Corda', 'Instrumento de Sopro']
 
     while (true) {
 
@@ -35,30 +46,107 @@ export function main() {
             case 1:
                 console.log("\n\n* Cadastrar Instrumento *\n\n");
 
+                console.log("Digite o nome do instrumento: ")
+                nome = readlinesync.question("")
+
+                console.log("Informe o tipo do instrumento: ")
+                tipo = readlinesync.keyInSelect(tipoInstrumentos, "", { cancel: false }) + 1
+
+                console.log("Digite o preço do instrumento: ")
+                preco = readlinesync.questionFloat("R$ ")
+
+                switch (tipo) {
+                    case 1:
+                        console.log("Digite o material da corda do instrumento: ")
+                        materialCorda = readlinesync.question("")
+                        instrumentos.cadastrar(
+                            new InstrumentosCorda(instrumentos.gerarNumero(), nome, tipo, preco, materialCorda)
+                        )
+                        break;
+
+                    case 2:
+                        console.log("Digite o material do instrumento: ")
+                        materialInstrumento = readlinesync.question("")
+                        instrumentos.cadastrar(
+                            new InstrumentosSopro(instrumentos.gerarNumero(), nome, tipo, preco, materialInstrumento)
+                        )
+                        break;
+                }
+
                 keyPress()
                 break;
             case 2:
                 console.log("\n\n* Listar Todos Instrumentos *\n\n");
+
+                instrumentos.listarTodos();
 
                 keyPress()
                 break;
             case 3:
                 console.log("\n\n* Buscar Instrumento por ID *\n\n");
 
+                console.log("Digite o ID do instrumento que deseja realizar a consulta de dados: ");
+                id = readlinesync.questionInt("");
+                instrumentos.procurarPorId(id);
+
                 keyPress()
                 break;
             case 4:
                 console.log("\n\n* Atualizar Dados do Instrumento *\n\n");
+
+                console.log("Digite o ID do instrumento que deseja atualizar os dados: ");
+                id = readlinesync.questionInt("");
+
+                let instrumento = instrumentos.buscarNoArray(id);
+
+                if(instrumento != null){
+
+                    console.log("Digite o novo ID do instrumento: ")
+                    id = readlinesync.questionInt("")
+    
+                    console.log("Digite o nome do instrumento: ")
+                    nome = readlinesync.question("")
+
+                    console.log("Digite o preço do instrumento: ")
+                    preco = readlinesync.questionFloat("R$ ")
+    
+                    tipo = instrumento.tipo
+
+                    switch (tipo) {
+                        case 1:
+                            console.log("Digite o material da corda do instrumento: ")
+                            materialCorda = readlinesync.question("")
+                            instrumentos.cadastrar(
+                                new InstrumentosCorda(id, nome, tipo, preco, materialCorda)
+                            )
+                            break;
+    
+                        case 2:
+                            console.log("Digite o material do instrumento: ")
+                            materialInstrumento = readlinesync.question("")
+                            instrumentos.cadastrar(
+                                new InstrumentosSopro(id, nome, tipo, preco, materialInstrumento)
+                            )
+                            break;
+                    }
+                }else{
+                    console.log("O instrumento não foi localizado!");
+                }
 
                 keyPress()
                 break;
             case 5:
                 console.log("\n\n* Deletar Instrumento *\n\n");
 
+                console.log("Digite o ID do instrumento que deseja deletar: ")
+                id = readlinesync.questionInt("");
+                instrumentos.deletar(id);
+
                 keyPress()
                 break;
             default:
                 console.log("\nOpção Inválida!\n");
+                
                 keyPress()
                 break;
         }
